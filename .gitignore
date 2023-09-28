@@ -166,3 +166,4 @@ sphinx_*/
 
 # Custom
 /build.sh
+Documentation/devicetree/bindings
