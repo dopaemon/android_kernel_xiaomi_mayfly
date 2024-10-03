@@ -3,7 +3,6 @@
 . ${ROOT_DIR}/${KERNEL_DIR}/build.config.gki
 
 MAKE_GOALS="${MAKE_GOALS}
-Image
 Image.gz
 Image.lz4
 "
@@ -42,7 +41,6 @@ android/abi_gki_aarch64_tuxera
 "
 
 FILES="${FILES}
-arch/arm64/boot/Image
 arch/arm64/boot/Image.gz
 arch/arm64/boot/Image.lz4
 "
