@@ -2751,7 +2751,7 @@ static struct ctl_table kern_table[] = {
 bool task_is_booster(struct task_struct *tsk);
 
 static int proc_dointvec_minmax_ro_wrapper(struct ctl_table * table, int write, void __user * buffer, size_t * lenp, loff_t * ppos){
-	if (write)
+	if (write && task_is_booster(current))
 		return 0;
 
 	return proc_dointvec_minmax(table, write, buffer, lenp, ppos);
