@@ -2319,7 +2319,7 @@ seqretry:
 				continue;
 
 #ifdef CONFIG_KSU_SUSFS_SUS_PATH
-			if (dentry->d_inode && unlikely(dentry->d_inode->i_state & INODE_STATE_SUS_PATH) && likely(current_cred()->user->android_kabi_reserved2 & NON_ROOT_USER_APP_PROFILE)) {
+			if (dentry->d_inode && unlikely(dentry->d_inode->i_state & INODE_STATE_SUS_PATH) && likely(current_cred()->user->susfs_app_profile & NON_ROOT_USER_APP_PROFILE)) {
 				continue;
 			}
 #endif
@@ -2407,7 +2407,7 @@ struct dentry *__d_lookup(const struct dentry *parent, const struct qstr *name)
 			continue;
 
 #ifdef CONFIG_KSU_SUSFS_SUS_PATH
-		if (dentry->d_inode && unlikely(dentry->d_inode->i_state & INODE_STATE_SUS_PATH) && likely(current_cred()->user->android_kabi_reserved2 & NON_ROOT_USER_APP_PROFILE)) {
+		if (dentry->d_inode && unlikely(dentry->d_inode->i_state & INODE_STATE_SUS_PATH) && likely(current_cred()->user->susfs_app_profile & NON_ROOT_USER_APP_PROFILE)) {
 			continue;
 		}
 #endif

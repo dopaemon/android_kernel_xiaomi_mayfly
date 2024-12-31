@@ -37,9 +37,9 @@
 
 /*
  * inode->i_state => storing flag 'INODE_STATE_'
- * mount->mnt.android_kabi_reserved4 => storing original mnt_id
- * task_struct->android_kabi_reserved8 => storing last valid fake mnt_id
- * user_struct->android_kabi_reserved2 => storing flag 'NON_ROOT_USER_APP_PROFILE'
+ * mount->mnt.susfs_orig_mnt_id => storing original mnt_id
+ * task_struct->susfs_fake_mnt_id => storing last valid fake mnt_id
+ * user_struct->susfs_app_profile => storing flag 'NON_ROOT_USER_APP_PROFILE'
  */
 
 #define INODE_STATE_SUS_PATH		BIT(24)

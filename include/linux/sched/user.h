@@ -44,7 +44,11 @@ struct user_struct {
 	/* Miscellaneous per-user rate limit */
 	struct ratelimit_state ratelimit;
 
+#ifdef CONFIG_KSU_SUSFS_SUS_PATH
+	ANDROID_KABI_USE(1, u64 susfs_app_profile);
+#else
 	ANDROID_KABI_RESERVE(1);
+#endif
 	ANDROID_KABI_RESERVE(2);
 	ANDROID_OEM_DATA_ARRAY(1, 2);
 };

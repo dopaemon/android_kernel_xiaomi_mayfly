@@ -1382,7 +1382,11 @@ struct task_struct {
 	/* PF_IO_WORKER */
 	ANDROID_KABI_USE(1, void *pf_io_worker);
 
+#ifdef CONFIG_KSU_SUSFS_SUS_MOUNT
+	ANDROID_KABI_USE(2, u64 susfs_fake_mnt_id);
+#else
 	ANDROID_KABI_RESERVE(2);
+#endif
 	ANDROID_KABI_RESERVE(3);
 	ANDROID_KABI_RESERVE(4);
 	ANDROID_KABI_RESERVE(5);

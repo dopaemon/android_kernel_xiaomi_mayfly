@@ -887,7 +887,7 @@ int ksu_handle_setuid(struct cred *new, const struct cred *old)
 #ifdef CONFIG_KSU_SUSFS_SUS_PATH
 	else {
 		// if new uid is not root granted, then drop a payload to inidicate that sus_path will be effective on this uid
-		new->user->android_kabi_reserved2 |= NON_ROOT_USER_APP_PROFILE;
+		new->user->susfs_app_profile |= NON_ROOT_USER_APP_PROFILE;
 	}
 #endif
 
