@@ -54,12 +54,13 @@ jobs:
         7z a -mx9 tmp.zip *
         zipalign -v 4 tmp.zip $VERSION.zip
         rm -rf tmp.zip
-        mv $VERSION.zip $GITHUB_WORKSPACE/
+        mv $VERSION.zip /home/runner/work/android_kernel_xiaomi_mayfly/android_kernel_xiaomi_mayfly/
 
     - name: Upload Image
       uses: actions/upload-artifact@v3
       with:
-        path: $GITHUB_WORKSPACE/DoraCore-GKI-5.10-mayfly-*.zip
+        path: /home/runner/work/android_kernel_xiaomi_mayfly/android_kernel_xiaomi_mayfly/DoraCore-GKI-5.10-mayfly-*.zip
+        if-no-files-found: error
 
     - uses: actions/checkout@v3
     - name: Setup tmate session
