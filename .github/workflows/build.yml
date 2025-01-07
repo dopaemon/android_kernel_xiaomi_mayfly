@@ -1,0 +1,59 @@
+name: Build android common kernel
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Install Package For Build
+      run: |
+        sudo apt update && sudo apt install -y curl liblz4-1 libyaml-0-2 p7zip-full gcc g++ bison bc make git zip flex zipalign libssl-dev python3 gcc-aarch64-linux-gnu cpio tree vim
+
+    - name: Download Build Tools
+      continue-on-error: true
+      run: |
+        cd $GITHUB_WORKSPACE
+        pwd
+        tree -L 2
+        git clone https://gerrit.googlesource.com/git-repo
+        mkdir android-kernel && cd android-kernel
+        ../git-repo/repo init --depth=1 --u https://android.googlesource.com/kernel/manifest -b common-android12-5.10
+        ../git-repo/repo sync
+        rm -rf .git .github
+        rm -rf common
+        git clone -b master --single-branch --depth=1 https://github.com/dopaemon/android_kernel_xiaomi_mayfly.git common
+        cd common/
+        cat arch/arm64/configs/vendor/mayfly_GKI.config >> arch/arm64/configs/gki_defconfig
+
+    - name: Build Kernel
+      run: |
+        cd $GITHUB_WORKSPACE/android-kernel
+        pwd
+        tree -L 2
+        LTO=thin BUILD_CONFIG=common/build.config.gki.aarch64 build/build.sh -j$(nproc --all)
+
+    - name: Build Kernel Package
+      run: |
+        VERSION="DoraCore-GKI-5.10-mayfly-$(date '+%Y-%m%d-%H%M')"
+        cd $GITHUB_WORKSPACE
+        pwd
+        tree -L 2
+        git clone -b GKI --depth=1 https://github.com/dopaemon/Anykernel3.git ./AnyKernel3
+        cp -r android-kernel/out/android12-5.10/dist/Image AnyKernel3
+        cd AnyKernel3
+        7z a -mx9 tmp.zip *
+        zipalign -v 4 tmp.zip $VERSION.zip
+        rm -rf tmp.zip
+        mv $VERSION.zip $GITHUB_WORKSPACE/
+
+    - name: Upload Image
+      uses: actions/upload-artifact@v3
+      with:
+        path: $GITHUB_WORKSPACE/DoraCore-GKI-5.10-mayfly-*.zip
+
+    - uses: actions/checkout@v3
+    - name: Setup tmate session
+      if: failure()
+      uses: mxschmitt/action-tmate@v3
