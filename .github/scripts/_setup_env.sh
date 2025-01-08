@@ -73,10 +73,10 @@ cat ${ROOT_DIR}/${BUILD_CONFIG}
 
 export TZ=UTC
 export LC_ALL=C
-export SOURCE_DATE_EPOCH=$(git -C ${ROOT_DIR}/${KERNEL_DIR} log -1 --pretty=%ct)
-export KBUILD_BUILD_TIMESTAMP="$(date -d @${SOURCE_DATE_EPOCH})"
-export KBUILD_BUILD_HOST=build-host
-export KBUILD_BUILD_USER=build-user
+# export SOURCE_DATE_EPOCH=$(git -C ${ROOT_DIR}/${KERNEL_DIR} log -1 --pretty=%ct)
+export KBUILD_BUILD_TIMESTAMP="$(date)"
+export KBUILD_BUILD_HOST=localhost
+export KBUILD_BUILD_USER=dopaemon
 export KBUILD_BUILD_VERSION=1
 
 # List of prebuilt directories shell variables to incorporate into PATH

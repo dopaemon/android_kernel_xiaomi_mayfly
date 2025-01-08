@@ -12,17 +12,18 @@ jobs:
         sudo apt update && sudo apt install -y curl liblz4-1 libyaml-0-2 p7zip-full gcc g++ bison bc make git zip flex zipalign libssl-dev python3 gcc-aarch64-linux-gnu cpio tree vim
 
     - name: Download Build Tools
-      continue-on-error: true
+      continue-on-error: false
       run: |
         cd $GITHUB_WORKSPACE
         pwd
         tree -L 2
         git clone https://gerrit.googlesource.com/git-repo
         mkdir android-kernel && cd android-kernel
-        ../git-repo/repo init --depth=1 --u https://android.googlesource.com/kernel/manifest -b common-android12-5.10
+        ../git-repo/repo init --depth=1 --u https://github.com/dopaemon/android_kernel_xiaomi_mayfly.git -b manifest
         ../git-repo/repo sync
-        rm -rf .git .github
+        rm -rf .git .github .repo
         rm -rf common
+        git clone -b 14.0 --single-branch --depth=1 https://gitlab.com/vermouth/android_prebuilts_clang_host_linux-x86_clang-r536225.git prebuilts-master/clang/host/linux-x86/clang-r547379
         cd ./build
         rm -rf _setup_env.sh
         wget https://raw.githubusercontent.com/dopaemon/android_kernel_xiaomi_mayfly/refs/heads/master/.github/scripts/_setup_env.sh
