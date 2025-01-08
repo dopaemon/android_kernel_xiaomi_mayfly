@@ -49,7 +49,7 @@ jobs:
         pwd
         tree -L 2
         git clone -b GKI --depth=1 https://github.com/dopaemon/Anykernel3.git ./AnyKernel3
-        cp -r android-kernel/out/android12-5.10/dist/Image AnyKernel3
+        cp -r android-kernel/out/android12-5.10/dist/Image.gz AnyKernel3/
         cd AnyKernel3
         7z a -mx9 tmp.zip *
         zipalign -v 4 tmp.zip $VERSION.zip
