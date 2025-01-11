@@ -72,3 +72,4 @@ obj-y				+= hwid/
 wl2866d_ldo-y			+= wl2866d.o
 obj-$(CONFIG_LDO_WL2866D)	+= wl2866d_ldo.o
 obj-$(CONFIG_MMHARDWARE_DETECTION)	+= mmhardware_sysfs.o
+obj-y				+= perf_helper/
