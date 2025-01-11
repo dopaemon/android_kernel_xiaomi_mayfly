@@ -1049,6 +1049,7 @@ static void __exit perf_helper_exit(void)
 		sysfs_remove_group(mimd_kobj, &mimd_attr_group);
 		kobject_put(mimd_kobj);
 	}
+	remove_proc_entry("perflock_exception", NULL);
 
 	wakeup_source_unregister(ws);
 	if (!IS_ERR(reclaim_task))
