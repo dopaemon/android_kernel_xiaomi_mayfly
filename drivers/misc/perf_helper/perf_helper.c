@@ -311,7 +311,7 @@ static void restore_scan_type(void)
 	atomic_set(&scan_type, 0);
 }
 
-static void android_vh_tune_scan_type(void *unused, enum scan_balance *scan_balance)
+static void android_vh_tune_scan_type(void *unused, char *pscan_type)
 {
 	int scan = atomic_read(&scan_type);
 	struct task_struct* leader = current->group_leader;
@@ -328,7 +328,7 @@ static void android_vh_tune_scan_type(void *unused, enum scan_balance *scan_bala
 		    || strncmp(comm, "mimd@2.0-servic", strlen(comm))
                     || strncmp(comm, "mimd@1.0-servic", strlen(comm))
 		    || strncmp(comm, "sh", strlen(comm))) {
-			*scan_balance = scan;
+			*pscan_type = scan;
 		}
 		put_task_struct(leader);
 	}
@@ -362,8 +362,6 @@ static void global_reclaim_record(unsigned long nr_reclaim)
 
 static int g_recliam_func(void *data)
 {
-	unsigned int reclaim_options = MEMCG_RECLAIM_MAY_SWAP;
-
 	while (!kthread_should_stop()) {
 		unsigned long nr_reclaim = 0;
 		unsigned long reclaim_size = 0;
@@ -381,7 +379,7 @@ static int g_recliam_func(void *data)
 
 			reclaimed = try_to_free_mem_cgroup_pages(NULL,
 					reclaim_size - nr_reclaim,
-					GFP_KERNEL, reclaim_options);
+					GFP_KERNEL, true);
 
 			if (!nr_retries--)
 				break;
@@ -538,6 +536,7 @@ static ssize_t kdamond_cpuset_write(struct file *file, const char __user *userbu
 	struct task_struct *kdamond_task = NULL;
 	char buf[BUFF_SIZE];
 	int  cpumask_str[BUFF_SIZE];
+	int i;
 
 	if (count > BUFF_SIZE)
 		return -EINVAL;
@@ -547,7 +546,7 @@ static ssize_t kdamond_cpuset_write(struct file *file, const char __user *userbu
 
 	strncpy(cpu_set, buf, BUFF_SIZE-1);
 	// 使用循环来初始化数组的所有元素为-1
-	for (int i = 0; i < BUFF_SIZE; i++)
+	for (i = 0; i < BUFF_SIZE; i++)
 		cpumask_str[i] = -1;
 	// 对上层输入字符串进行解析，获得cpu_mask，damon监控线程pid
 	if (!kdamond_input_parse(buf,cpumask_str, &kdamond_pid)) {
@@ -559,7 +558,7 @@ static ssize_t kdamond_cpuset_write(struct file *file, const char __user *userbu
 		return -EINVAL;
 	cpumask_clear(&kdamond_cpumask);
 	// 遍历cpumask_str字符串，直到遇到元素-1停止，设置cpumask
-	for (int i = 0; i < BUFF_SIZE; i++) {
+	for (i = 0; i < BUFF_SIZE; i++) {
 		if (cpumask_str[i] >= 0) {
 			cpumask_set_cpu(cpumask_str[i], &kdamond_cpumask);
 		} else {
@@ -742,12 +741,14 @@ static const struct attribute_group mimd_attr_group = {
 // write function
 static void perflock_exception(const char *perflock_msg)
 {
+	int i;
+
 	if (!perflock_msg)
 		return;
 	if (!spin_trylock(&ple_lock))
 		return;
 	// find same request change msgcount
-	for (int i = 0; i < ple_num; i++) {
+	for (i = 0; i < ple_num; i++) {
 		if (strcmp(perflock_msg, ple_buff[i].msg) == 0 && ple_buff[i].msg_count < INT_MAX) {
 			ple_buff[i].msg_count++;
 			spin_unlock(&ple_lock);
