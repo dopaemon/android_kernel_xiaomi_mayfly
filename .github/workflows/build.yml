@@ -49,7 +49,7 @@ jobs:
         cd $GITHUB_WORKSPACE
         pwd
         tree -L 2
-        git clone -b GKI --depth=1 https://github.com/dopaemon/Anykernel3.git ./AnyKernel3
+        git clone -b master --depth=1 https://github.com/dopaemon/Anykernel3.git ./AnyKernel3
         cp -r android-kernel/out/android12-5.10/dist/Image.gz AnyKernel3/
         cd AnyKernel3
         7z a -mx9 tmp.zip *
