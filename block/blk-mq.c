@@ -394,7 +394,6 @@ static struct request *__blk_mq_alloc_requests(struct blk_mq_alloc_data *data)
 	u64 alloc_time_ns = 0;
 	struct request *rq;
 	unsigned int tag;
-	bool skip = false;
 
 	/* alloc_time includes depth and tag waits */
 	if (blk_queue_rq_alloc_time(q))
