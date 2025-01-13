@@ -1,4 +1,4 @@
-name: Build android common kernel
+name: Build android common kernel KernelSU Next
 
 on:
   workflow_dispatch:
@@ -32,8 +32,8 @@ jobs:
         git clone -b master --single-branch --depth=1 https://github.com/dopaemon/android_kernel_xiaomi_mayfly.git common
         cd common/
         cat arch/arm64/configs/vendor/mayfly_GKI.config >> arch/arm64/configs/gki_defconfig
+        echo "CONFIG_KSU=y" >> arch/arm64/configs/mayfly-perf_defconfig
         cd ..
-        git clone -b lineage-22.1 --single-branch --depth=1 https://github.com/cupid-development/android_kernel_xiaomi_sm8450-devicetrees.git sm8450-devicetrees
         git clone -b lineage-22.1 --single-branch --depth=1 https://github.com/cupid-development/android_kernel_xiaomi_sm8450-modules.git sm8450-modules
 
     - name: Build Kernel
@@ -45,7 +45,7 @@ jobs:
 
     - name: Build Kernel Package
       run: |
-        VERSION="DoraCore-GKI-5.10-mayfly-$(date '+%Y-%m%d-%H%M')"
+        VERSION="DoraCore-GKI-5.10-SusFS-mayfly-$(date '+%Y-%m%d-%H%M')"
         cd $GITHUB_WORKSPACE
         pwd
         tree -L 2
@@ -60,7 +60,7 @@ jobs:
     - name: Upload Image
       uses: actions/upload-artifact@v3
       with:
-        path: /home/runner/work/android_kernel_xiaomi_mayfly/android_kernel_xiaomi_mayfly/DoraCore-GKI-5.10-mayfly-*.zip
+        path: /home/runner/work/android_kernel_xiaomi_mayfly/android_kernel_xiaomi_mayfly/DoraCore-GKI-5.10-SusFS-mayfly-*.zip
         if-no-files-found: error
 
     # - name: Setup tmate session
