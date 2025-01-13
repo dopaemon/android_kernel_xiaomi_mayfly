@@ -5,7 +5,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     steps:
     - name: Install Package For Build
       run: |
@@ -58,7 +58,7 @@ jobs:
         mv $VERSION.zip /home/runner/work/android_kernel_xiaomi_mayfly/android_kernel_xiaomi_mayfly/
 
     - name: Upload Image
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         path: /home/runner/work/android_kernel_xiaomi_mayfly/android_kernel_xiaomi_mayfly/DoraCore-GKI-5.10-SusFS-mayfly-*.zip
         if-no-files-found: error
